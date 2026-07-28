@@ -15,6 +15,28 @@ from modules.preview import draw_nesting_preview
 from modules.pricing import PricingConfig, build_quote_data, make_timestamped_output_paths
 from modules.wps_exporter import WPSExporter
 
+# 隐藏客户演示页上的 GitHub / Deploy 等工具入口
+_HIDE_CHROME_CSS: str = """
+<style>
+/* Streamlit Cloud 顶部 GitHub / Deploy 按钮 */
+.stAppDeployButton, [data-testid="stAppDeployButton"] { display: none !important; }
+a[href*="github.com"] { display: none !important; }
+
+/* 右上角工具栏多余入口 */
+[data-testid="stToolbar"] a[href*="github"] { display: none !important; }
+[data-testid="stHeader"] a[href*="github"] { display: none !important; }
+
+/* 汉堡菜单中与源码相关入口（尽量收敛） */
+#MainMenu [data-testid="stMainMenuDecoration"] { display: none !important; }
+</style>
+"""
+
+
+def _hide_github_chrome() -> None:
+    """隐藏页面上的 GitHub / Deploy 图标（客户演示更干净）。"""
+    st.markdown(_HIDE_CHROME_CSS, unsafe_allow_html=True)
+
+
 DEFAULT_PARTS: List[Dict[str, Any]] = [
     {
         "id": "A",
@@ -109,7 +131,13 @@ def main() -> None:
         page_title="Steel AI Agent",
         page_icon="🧱",
         layout="wide",
+        menu_items={
+            "Get help": None,
+            "Report a bug": None,
+            "About": None,
+        },
     )
+    _hide_github_chrome()
     if not require_demo_login():
         return
 

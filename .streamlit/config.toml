@@ -6,6 +6,10 @@ enableXsrfProtection = true
 [browser]
 gatherUsageStats = false
 
+[client]
+# viewer：弱化开发者工具栏；配合页面 CSS 隐藏 GitHub 图标
+toolbarMode = "viewer"
+
 [theme]
 primaryColor = "#0F4C81"
 backgroundColor = "#FFFFFF"

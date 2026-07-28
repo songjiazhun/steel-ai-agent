@@ -37,6 +37,16 @@ def require_demo_login() -> bool:
 
     st.title("Steel AI Agent")
     st.caption("客户演示环境 · 请输入访问口令")
+    # 登录页同样隐藏 GitHub / Deploy 入口
+    st.markdown(
+        """
+        <style>
+        .stAppDeployButton, [data-testid="stAppDeployButton"] { display: none !important; }
+        a[href*="github.com"] { display: none !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     with st.form("demo_login_form"):
         password: str = st.text_input("访问口令", type="password")
         submitted: bool = st.form_submit_button("进入演示", type="primary")
