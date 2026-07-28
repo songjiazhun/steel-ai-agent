@@ -30,7 +30,7 @@ def require_demo_login() -> bool:
 
     if st.session_state.get("authenticated") is True:
         with st.sidebar:
-            if st.button("退出登录", use_container_width=True):
+            if st.button("退出登录", width="stretch"):
                 st.session_state.authenticated = False
                 st.rerun()
         return True

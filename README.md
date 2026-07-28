@@ -55,20 +55,25 @@ python3 main.py
 
 ## 部署线上（给客户演示）
 
+仓库地址：https://github.com/songjiazhun/steel-ai-agent
+
 推荐用 **Streamlit Community Cloud**（免费、有公网链接）：
 
-1. 把本仓库推到 GitHub（公开或私有均可）
-2. 打开 [https://share.streamlit.io](https://share.streamlit.io) 用 GitHub 登录
-3. New app → 选择仓库，Main file 填 `app.py`
-4. 在 App settings → Secrets 写入：
+1. 打开 [https://share.streamlit.io](https://share.streamlit.io) ，用 GitHub 账号 `songjiazhun` 登录并授权
+2. **Create app** → Repository 选 `songjiazhun/steel-ai-agent`
+3. Branch: `main`，Main file path: `app.py`
+4. 点 **Advanced settings** → Secrets，粘贴：
 
 ```toml
 demo_password = "给你客户的演示口令"
 ```
 
-5. Deploy 完成后把链接和口令发给客户即可
+5. Deploy，等待构建完成（首次约 1–3 分钟）
+6. 把生成的 `*.streamlit.app` 链接和口令发给客户
 
-说明：这是演示级口令保护，不是完整账号体系；正式商用再考虑多用户与权限。
+说明：
+- `packages.txt` 会安装 Linux 中文字体，保证云端预览图中文正常
+- 口令是演示级保护，不是完整账号体系
 
 ## 运行测试
 

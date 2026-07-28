@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import matplotlib.pyplot as plt
@@ -14,25 +15,50 @@ from matplotlib.patches import Rectangle
 
 from modules.nesting_engine import PlacedItem
 
-# macOS / Windows / Linux 常见中文字体
+# macOS / Windows / Linux（含 Streamlit Cloud）常见中文字体
 _CJK_FONT_CANDIDATES: List[str] = [
+    "Noto Sans CJK SC",
+    "Noto Sans CJK JP",
+    "Noto Serif CJK SC",
+    "Source Han Sans SC",
     "PingFang SC",
     "Hiragino Sans GB",
     "Heiti SC",
     "STHeiti",
     "Songti SC",
     "Arial Unicode MS",
-    "Noto Sans CJK SC",
-    "Source Han Sans SC",
     "Microsoft YaHei",
     "SimHei",
     "WenQuanYi Micro Hei",
 ]
 
+_LINUX_FONT_DIRS: List[str] = [
+    "/usr/share/fonts/opentype/noto",
+    "/usr/share/fonts/truetype/noto",
+    "/usr/share/fonts/noto-cjk",
+    "/usr/share/fonts/truetype/wqy",
+]
+
+
+def _register_linux_cjk_fonts() -> None:
+    """把系统 apt 安装的 Noto CJK 字体注册进 Matplotlib（Streamlit Cloud）。"""
+    for dir_path in _LINUX_FONT_DIRS:
+        root = Path(dir_path)
+        if not root.is_dir():
+            continue
+        for font_file in root.rglob("*"):
+            if font_file.suffix.lower() not in {".ttf", ".otf", ".ttc"}:
+                continue
+            try:
+                font_manager.fontManager.addfont(str(font_file))
+            except (OSError, RuntimeError, ValueError):
+                continue
+
 
 @lru_cache(maxsize=1)
 def _resolve_cjk_font() -> Optional[FontProperties]:
     """解析本机可用的中文字体，供 Matplotlib 绘制中文。"""
+    _register_linux_cjk_fonts()
     available_names: set[str] = {f.name for f in font_manager.fontManager.ttflist}
     for name in _CJK_FONT_CANDIDATES:
         if name in available_names:
@@ -45,15 +71,17 @@ def _resolve_cjk_font() -> Optional[FontProperties]:
 
     # 按文件名再扫一遍（部分环境 name 注册不完整）
     path_keywords: List[str] = [
+        "NotoSansCJK",
+        "NotoSerifCJK",
+        "SourceHanSans",
         "PingFang",
         "Hiragino Sans GB",
         "STHeiti",
         "Songti",
         "Arial Unicode",
-        "NotoSansCJK",
-        "SourceHanSans",
         "msyh",
         "simhei",
+        "wqy",
     ]
     for font in font_manager.fontManager.ttflist:
         path_lower: str = font.fname.lower()

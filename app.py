@@ -150,7 +150,7 @@ def main() -> None:
     edited_df: pd.DataFrame = st.data_editor(
         st.session_state.parts_df,
         num_rows="dynamic",
-        use_container_width=True,
+        width="stretch",
         column_config={
             "id": st.column_config.TextColumn("零件编号", required=True),
             "width_mm": st.column_config.NumberColumn(
@@ -229,7 +229,7 @@ def main() -> None:
                 quote["table_rows"],
                 columns=["项目", "规格/说明", "数量", "单价(元)", "金额(元)"],
             ),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
