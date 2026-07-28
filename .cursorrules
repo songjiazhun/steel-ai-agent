@@ -1,0 +1,12 @@
+# Steel AI Agent 项目开发规范
+
+## 项目目标
+开发钢材行业的 AI CAD 画图、2D 排版套裁与 WPS 报价生成系统。
+
+## 代码与架构约束
+1. **模块化设计**：所有算法和功能放在 `modules/` 目录下，`main.py` 只做调度。
+2. **强类型声明**：所有 Python 函数必须添加 Type Hints（如 `List`, `Dict`, `Tuple`）。
+3. **数据类规范**：所有数据传递优先使用 `dataclass`，严禁使用未经定义的自由字典传递核心数据。
+4. **图层与颜色标准**：
+   - CAD (`ezdxf`): 大板外框为 `0_STOCK_BORDER` (红色), 零件为 `0_PARTS` (绿色), 文字为 `0_TEXT` (黄色)。
+5. **文档兼容性**：WPS 导出 (`python-docx`) 必须支持 XML 背景色设置，保证 WPS Office 完美兼容。
